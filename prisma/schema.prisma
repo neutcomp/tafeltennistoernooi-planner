@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model attendee {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  firstname String    @db.VarChar(20)
+  lastname  String    @db.VarChar(30)
+  ration    Int
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @db.DateTime(0)
+  user      user      @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "attendee_userid")
+
+  @@index([userId], map: "attendee_userid_idx")
+}
+
+model tournament {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  name      String   @unique(map: "Name_UNIQUE") @db.VarChar(45)
+  createdAt DateTime @default(now()) @db.DateTime(0)
+  updatedAt String?  @db.VarChar(45)
+  user      user     @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "tournament_userid")
+
+  @@index([userId], map: "Id_idx")
+}
+
+model user {
+  id         Int          @id @default(autoincrement())
+  firstname  String       @db.VarChar(20)
+  lastname   String       @db.VarChar(30)
+  email      String       @unique(map: "email_UNIQUE") @db.VarChar(50)
+  isActive   Boolean      @default(true)
+  createdAt  DateTime     @default(now()) @db.DateTime(0)
+  updatedAt  DateTime?    @db.DateTime(0)
+  attendee   attendee[]
+  tournament tournament[]
+}

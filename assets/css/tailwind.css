@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-50;
+}
+
+h2 {
+  @apply text-2xl font-bold tracking-tight text-black sm:text-2xl;
+}
+
+p {
+	@apply mb-4;
+}
+
+.router-link-active {
+  @apply bg-yellow-400 font-bold text-black;
+}
+
+@layer components {
+  .btn {
+    @apply bg-[#12b488] text-white px-3 py-2 rounded-md text-sm text-white;
+  }
+
+  .btn:hover {
+    @apply bg-[#12b489af] text-white
+  }
+}
