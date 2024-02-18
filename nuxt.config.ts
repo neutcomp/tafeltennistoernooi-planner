@@ -3,7 +3,9 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'Tafeltennis Toernooi Planner!',
-      description: 'Welkom bij de Tafeltennis Toernooi Planner. Alles om je tafeltennis toernooi te organiseren.',
+      meta: [
+        { name: 'description', content: 'Welkom bij de Tafeltennis Toernooi Planner. Alles om je tafeltennis toernooi te organiseren.' }
+      ],
       link: [
         {
           rel: 'stylesheet',
@@ -23,10 +25,10 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/css/tailwind.css'],
-  typescript: {
-    shim: false
-  },
-  devtools: { enabled: true },
+  // typescript: {
+  //   shim: false
+  // },
+  devtools: { enabled: false },
   postcss: {
     plugins: {
       tailwindcss: {},

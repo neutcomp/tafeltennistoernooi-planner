@@ -1,12 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 
-
 export default defineEventHandler(async (event) => {
     const prisma = new PrismaClient();
     const body = await readBody(event);
 
-    // Validate user
-    const { error } = UserDelete.validate(body, {
+    // Validate attendee
+    const { error } = AttendeeDeleteSchema.validate(body, {
         abortEarly: true,
         allowUnknown: true
     });
@@ -18,23 +17,23 @@ export default defineEventHandler(async (event) => {
         });
     }
 
-    // Check if user exists
-    const userExist = prisma.user.findFirst({
-        where: { email: body.email }
+    // Check if attendee exists
+    const attendeeExist = prisma.attendee.findFirst({
+        where: { id: body.id }
     })
 
-    if (userExist != null) {
+    if (attendeeExist === null) {
         throw createError({
-            message: 'Sorry deze gebruiker bestaat niet'
+            message: 'Sorry dit toernooi bestaat niet'
         });
     }
 
-    // Create user
-    const user = await prisma.user.delete({
+    // // Delete attendee
+    const attendee = await prisma.attendee.delete({
         where: {
             id: body.id
         }
     })
 
-    return user;
+    return attendee;
 })

@@ -6,12 +6,20 @@ body {
   @apply bg-gray-50;
 }
 
+h1 {
+  @apply font-light text-5xl dark:text-black mb-3
+}
+
 h2 {
   @apply text-2xl font-bold tracking-tight text-black sm:text-2xl;
 }
 
 p {
-	@apply mb-4;
+  @apply mb-4;
+}
+
+input {
+  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
 }
 
 .router-link-active {
@@ -20,7 +28,11 @@ p {
 
 @layer components {
   .btn {
-    @apply bg-[#12b488] text-white px-3 py-2 rounded-md text-sm text-white;
+    @apply bg-[#12b488] px-3 py-2 rounded-md text-sm text-white mr-2;
+  }
+
+  .btn-red {
+    @apply bg-[#b90e0a] px-3 py-2 rounded-md text-sm text-white;
   }
 
   .btn:hover {

@@ -27,6 +27,18 @@ export const AttendeeSchema = Joi.object({
     lastname: Joi.string().max(30).min(2).required(),
 })
 
+export const AttendeeDeleteSchema = Joi.object({
+    id: Joi.number().required()
+})
+
+export const TournamentSchema = Joi.object({
+    name: Joi.string().max(20).min(2).required()
+})
+
+export const TournamentDeleteSchema = Joi.object({
+    id: Joi.number().required()
+})
+
 export const cookieName = 'isAuthenticated'
 
 export const checkAuthentication = (event: H3Event) => {

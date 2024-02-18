@@ -12,5 +12,8 @@ export default {
     extend: {},
   },
   plugins: [],
+  buildModules: [
+    '@nuxtjs/date-fns',
+  ]
 }
 
