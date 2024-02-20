@@ -77,7 +77,7 @@ async function addTournament(name) {
 
   if (name) {
     try {
-      addedTournament = await $fetch('/api/tournament/add', {
+      addedTournament = await useFetch('/api/tournament/add', {
         method: 'POST',
         body: {
           userId: 1, // Todo make this depending on the user that has login
@@ -98,7 +98,7 @@ async function editTournament(editedUser) {
   let editUser = null;
 
   if (editedUser.firstname && editUser.lastname && editUser.email) {
-    editUser = await $fetch('/api/tournament', {
+    editUser = await useFetch('/api/tournament', {
       method: 'PUT',
       body: {
         userId: 1,

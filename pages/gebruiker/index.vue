@@ -100,7 +100,7 @@ async function addUser(firstname, lastname, email) {
     let addedUser = null
 
     if (firstname && lastname && email) {
-        addedUser = await $fetch('/api/user/add', {
+        addedUser = await useFetch('/api/user/add', {
             method: 'POST',
             body: {
                 firstname: firstname,
@@ -119,7 +119,7 @@ async function editUser(editedUser) {
     let editUser = null
 
     if (editedUser.firstname && editUser.lastname && editUser.email) {
-        editUser = await $fetch('/api/user', {
+        editUser = await useFetch('/api/user', {
             method: 'PUT',
             body: {
                 firstname: editedUser.firstname,

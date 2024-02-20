@@ -19,7 +19,16 @@ export default defineEventHandler(async event => {
 
   // Check if attendee exists
   const attendeeExist = await prisma.attendee.findFirst({
-    where: { firstname: body.name, lastname: body.lastname },
+    where: {
+      firstname: {
+        equals: body.name,
+      },
+      AND: {
+        lastname: {
+          equals: body.lastname,
+        },
+      },
+    },
   });
 
   if (attendeeExist) {

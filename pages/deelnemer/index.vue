@@ -128,8 +128,7 @@ async function addAttendee(firstname, lastname, rating) {
   let addedAttendee = null
 
   if (firstname && lastname && rating) {
-    console.log('hier')
-    addedAttendee = await $fetch('/api/attendee/add', {
+    addedAttendee = await useFetch('/api/attendee/add', {
       method: 'POST',
       body: {
         userId: 1, // Todo make this depending on the user that has login
@@ -149,7 +148,7 @@ async function editAttendee(editedAttendee) {
   let editAttendee = null
 
   if (editedAttendee.firstname && editAttendee.lastname && editAttendee.rating) {
-    editAttendee = await $fetch('/api/attendee', {
+    editAttendee = await useFetch('/api/attendee', {
       method: 'PUT',
       body: {
         firstname: editedAttendee.firstname,
