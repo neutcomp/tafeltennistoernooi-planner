@@ -29,7 +29,6 @@ export default defineEventHandler(async event => {
   });
 
   if (attendeeExist) {
-    console.log(attendeeExist.id);
     throw createError({
       statusCode: 200,
       statusMessage: 'Sorry deze deelnemer bestaat al',
