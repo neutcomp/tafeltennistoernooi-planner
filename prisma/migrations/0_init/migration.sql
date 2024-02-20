@@ -4,6 +4,7 @@ CREATE TABLE `attendee` (
     `userId` INTEGER NOT NULL,
     `firstname` VARCHAR(20) NOT NULL,
     `lastname` VARCHAR(30) NOT NULL,
+    `rating` INTEGER NULL,
     `isActive` BOOLEAN NOT NULL DEFAULT true,
     `createdAt` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
     `updatedAt` DATETIME(0) NULL,

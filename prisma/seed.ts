@@ -2,14 +2,12 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-    await prisma.user.upsert({
-        where: { email: 'bjornvdneut@gmail.com' },
-        update: {},
-        create: {
+    await prisma.user.create({
+        data: {
             email: 'bjornvdneut@gmail.com',
             firstname: 'Bjorn',
             lastname: 'van der Neut',
-        },
+        }
     })
 }
 main()

@@ -32,10 +32,10 @@ export default defineEventHandler(async (event) => {
     // Create attendee
     const attendee = await prisma.attendee.create({
         data: {
-            userId: 1, // Todo make this depending on the user that has login
+            userId: body.userId,
             firstname: body.firstname,
             lastname: body.lastname,
-            ration: body.rating
+            rating: Number(body.rating)
         }
     })
 

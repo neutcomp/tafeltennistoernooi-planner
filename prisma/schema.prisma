@@ -12,7 +12,7 @@ model attendee {
   userId    Int
   firstname String    @db.VarChar(20)
   lastname  String    @db.VarChar(30)
-  ration    Int
+  rating    Int?
   isActive  Boolean   @default(true)
   createdAt DateTime  @default(now()) @db.DateTime(0)
   updatedAt DateTime? @db.DateTime(0)
