@@ -32,8 +32,8 @@ export const AttendeeDeleteSchema = Joi.object({
 })
 
 export const TournamentSchema = Joi.object({
-    name: Joi.string().max(20).min(2).required()
-})
+  name: Joi.string().max(40).min(2).required(),
+});
 
 export const TournamentDeleteSchema = Joi.object({
     id: Joi.number().required()

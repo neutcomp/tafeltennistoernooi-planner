@@ -12,7 +12,8 @@ export default defineEventHandler(async event => {
   // If we get an error, send it back
   if (error) {
     throw createError({
-      message: error.message,
+      statusCode: 200,
+      statusMessage: error.message,
     });
   }
 
@@ -23,7 +24,8 @@ export default defineEventHandler(async event => {
 
   if (attendeeExist === null) {
     throw createError({
-      message: 'Sorry dit toernooi bestaat niet',
+      statusCode: 200,
+      statusMessage: 'Sorry dit toernooi bestaat niet',
     });
   }
 

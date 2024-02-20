@@ -11,7 +11,8 @@ export default defineEventHandler(async event => {
   // Is we get an error, send it back
   if (error) {
     throw createError({
-      message: error.message,
+      statusCode: 200,
+      statusMessage: error.message,
     });
   }
 
@@ -22,7 +23,8 @@ export default defineEventHandler(async event => {
   // Is user does not exist
   if (!user) {
     throw createError({
-      message: 'Sorry de gebruiker kan niet gevonden worden',
+      statusCode: 200,
+      statusMessage: 'Sorry de gebruiker kan niet gevonden worden',
     });
   }
 

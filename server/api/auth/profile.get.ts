@@ -20,7 +20,8 @@ export default defineEventHandler(async (event: H3Event) => {
   // Is user does not exist
   if (!user) {
     throw createError({
-      message: 'Sorry de gebruiker kan niet gevonden worden',
+      statusCode: 200,
+      statusMessage: 'Sorry de gebruiker kan niet gevonden worden',
     });
   }
 

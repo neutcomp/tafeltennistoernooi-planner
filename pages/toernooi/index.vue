@@ -7,10 +7,10 @@
     <form class="max-w-sm mx-auto">
       <div class="mb-3">
         <label for="name">Naam</label>
-        <input type="input" id="name" v-model="name" placeholder="Jeugd clubkampioenschappen 2024" required>
+        <input type="input" id="name" v-model="name" placeholder="Jeugd clubkampioenschappen 2024" required />
       </div>
-      <button type="submit" @click.prevent="addTournament(name)" class="btn">Voeg toernooi
-        toe</button>
+      <button type="submit" @click.prevent="addTournament(name)" class="btn">Voeg toernooi toe</button>
+      <div id="error" class="error">{{ errorMessage }}</div>
     </form>
   </div>
 
@@ -18,19 +18,13 @@
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-          <th scope="col" class="px-6 py-3">
-            Naam
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Datum
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Edit
-          </th>
+          <th scope="col" class="px-6 py-3">Naam</th>
+          <th scope="col" class="px-6 py-3">Datum</th>
+          <th scope="col" class="px-6 py-3">Edit</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(tournament) in tournament" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <tr v-for="tournament in tournament" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
           <th scope="row" class="px-6 py-4">
             {{ tournament.name }}
           </th>
@@ -48,70 +42,73 @@
 </template>
 
 <script setup>
+let errorMessage = ref(null)
 
-const { data: tournament } = await getTournaments()
-const name = ref(null)
+const { data: tournament } = await getTournaments();
+const name = ref(null);
 
 const editedTournament = ref({
-  name: null
-})
+  name: null,
+});
 
 async function getTournaments() {
-  return await useFetch('/api/tournament')
+  return await useFetch('/api/tournament');
 }
 
 async function deleteTournament(id) {
-  let deletedTournament = null
+  let deletedTournament = null;
 
   if (id) {
     deletedTournament = await useFetch('/api/tournament/tournament', {
       method: 'DELETE',
       body: {
-        id: id
-      }
-    })
+        id: id,
+      },
+    });
   }
 
   if (deletedTournament) {
-    tournament.value = await getTournaments()
+    tournament.value = await getTournaments();
   }
 }
 
 async function addTournament(name) {
-  let addedAttendee = null
+  let addedTournament = null;
 
   if (name) {
-    addedAttendee = await $fetch('/api/attendee/add', {
-      method: 'POST',
-      body: {
-        firstname: firstname,
-        lastname: lastname,
-        email: email,
-      }
-    })
+    try {
+      addedTournament = await $fetch('/api/tournament/add', {
+        method: 'POST',
+        body: {
+          userId: 1, // Todo make this depending on the user that has login
+          name: name,
+        },
+      });
+    } catch (error) {
+      errorMessage = error.message
+    }
   }
 
-  if (addedAttendee) {
-    tournament.value = await getTournaments()
+  if (addedTournament) {
+    tournament.value = await getTournaments();
   }
 }
 
 async function editTournament(editedUser) {
-  let editUser = null
+  let editUser = null;
 
   if (editedUser.firstname && editUser.lastname && editUser.email) {
-    editUser = await $fetch('/api/attendee', {
+    editUser = await $fetch('/api/tournament', {
       method: 'PUT',
       body: {
-        firstname: editedUser.firstname,
-        lastname: editedUser.lastname,
-        email: editedUser.email,
-      }
-    })
+        userId: 1,
+        name: name,
+      },
+    });
   }
 
   if (editUser) {
-    tournament.value = await getTournaments()
+    tournament.value = await getTournaments();
   }
 }
 </script>

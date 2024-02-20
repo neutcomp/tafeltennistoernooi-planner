@@ -11,7 +11,8 @@ export default defineEventHandler(async event => {
   // If we get an error, send it back
   if (error) {
     throw createError({
-      message: error.message,
+      statusCode: 200,
+      statusMessage: error.message,
     });
   }
   console.log(body.firstname + ' ' + body.lastname);
@@ -22,7 +23,8 @@ export default defineEventHandler(async event => {
 
   if (attendeeExist.attendee.length > 0) {
     throw createError({
-      message: 'Sorry deze speler bestaat al',
+      statusCode: 200,
+      statusMessage: 'Sorry deze speler bestaat al',
     });
   }
 
