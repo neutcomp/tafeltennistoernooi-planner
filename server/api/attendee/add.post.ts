@@ -20,18 +20,16 @@ export default defineEventHandler(async event => {
   // Check if attendee exists
   const attendeeExist = await prisma.attendee.findFirst({
     where: {
-      firstname: {
-        equals: body.name,
-      },
-      AND: {
-        lastname: {
-          equals: body.lastname,
-        },
-      },
+      firstname: { equals: body.firstname },
+      lastname: { equals: body.lastname },
+    },
+    select: {
+      id: true,
     },
   });
 
   if (attendeeExist) {
+    console.log(attendeeExist.id);
     throw createError({
       statusCode: 200,
       statusMessage: 'Sorry deze deelnemer bestaat al',
