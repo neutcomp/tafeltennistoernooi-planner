@@ -1,10 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-
+import prisma from '../../../db/db';
 
 export default defineEventHandler(async () => {
-    const prisma = new PrismaClient();
+  const tournaments = prisma.tournament.findMany();
 
-    const tournaments = prisma.tournament.findMany();
-
-    return tournaments;
-})
+  return tournaments;
+});

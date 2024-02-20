@@ -1,12 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from '../../../db/db';
 
 export default defineEventHandler(async () => {
-    const prisma = new PrismaClient();
+  // Check if user exists
+  const users = prisma.user.findMany({
+    where: { isActive: true },
+  });
 
-    // Check if user exists
-    const users = prisma.user.findMany({
-        where: { isActive: true }
-    })
-
-    return users;
-})
+  return users;
+});
