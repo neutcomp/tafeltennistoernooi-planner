@@ -11,18 +11,16 @@ Installeer de applicatie:
 npm install
 ```
 
-## Installeer de database
-Draai de SQL die in het [db.txt](db.txt) file staat
-
 ## Creeer een .env bestand
-Maak een .env bestand in de root folder. Zet daar de volgende waardes in:
+Maak een .env bestand in de root folder. Zet daar de volgende waarde in:
 
 ```
-MYSQL_SERVER='localhost'
-MYSQL_USER='root'
-MYSQL_PASSWORD='xxxxxx'
-MYSQL_DATABASE='tafeltennistoernooiplanner'
+DATABASE_URL="mysql://username:password@localhost:3306/my-database-name"
 ```
+
+## Installeer de database
+
+npx prisma migrate dev --name init
 
 ## Development Server
 

@@ -45,4 +45,3 @@ ALTER TABLE `attendee` ADD CONSTRAINT `attendee_userid` FOREIGN KEY (`userId`) R
 
 -- AddForeignKey
 ALTER TABLE `tournament` ADD CONSTRAINT `tournament_userid` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE NO ACTION;
-
