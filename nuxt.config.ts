@@ -4,7 +4,10 @@ export default defineNuxtConfig({
     head: {
       title: 'Tafeltennis Toernooi Planner!',
       meta: [
-        { name: 'description', content: 'Welkom bij de Tafeltennis Toernooi Planner. Alles om je tafeltennis toernooi te organiseren.' }
+        {
+          name: 'description',
+          content: 'Welkom bij de Tafeltennis Toernooi Planner. Alles om je tafeltennis toernooi te organiseren.',
+        },
       ],
       link: [
         {
@@ -35,10 +38,10 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  modules: ['nuxt-icon'],
+  modules: ['nuxt-icon', 'dayjs-nuxt'],
   runtimeConfig: {
     DB_SERVER: process.env.DB_SERVER,
     DB_USERNAME: process.env.DB_USERNAME,
     DB_PASSWORD: process.env.DB_PASSWORD,
-  }
-})
+  },
+});

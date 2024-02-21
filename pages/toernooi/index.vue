@@ -42,7 +42,7 @@
                 {{ tournament.name }}
               </th>
               <td class="px-6 py-4">
-                {{ new Date(tournament.createdAt) }}
+                {{ $dayjs(tournament.createdAt).format('DD-MM-YYYY') }}
               </td>
               <td class="px-6 py-4">
                 <button @click="editTournament(tournament.id)" class="btn">edit</button>
