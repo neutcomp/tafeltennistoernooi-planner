@@ -5,7 +5,7 @@
         <h1>Overzicht deelnemers</h1>
       </div>
 
-      <button @click="isOpen = true" class="btn" type="button">Toevoegen deelnemer</button>
+      <button @click="isOpen = true" class="btn" type="button">Deelnemers toevoegen</button>
 
       <div v-show="isOpen" class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50">
         <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">
@@ -47,7 +47,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="attendee in attendee" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <tr v-for="attendee in attendees" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
               <th scope="row" class="px-6 py-4">
                 {{ attendee.firstname }}
               </th>
@@ -69,10 +69,10 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 const isOpen = ref(false);
-
-const { data: attendee } = await getAttendee();
+let errorMessage = ref(null);
+let { data: attendees } = await getAttendee();
 const firstname = ref(null);
 const lastname = ref(null);
 const rating = ref(null);
@@ -87,59 +87,62 @@ async function getAttendee() {
   return await useFetch('/api/attendee');
 }
 
-async function deleteAttendee(id) {
-  let deletedAttendee = null;
-
+async function deleteAttendee(id: number) {
   if (id) {
-    deletedAttendee = await useFetch('/api/attendee/attendee', {
-      method: 'DELETE',
-      body: {
-        id: id,
-      },
-    });
-  }
+    try {
+      await useFetch('/api/attendee/attendee', {
+        method: 'DELETE',
+        body: {
+          id: id,
+        },
+      });
+    } catch (error: any) {
+      errorMessage = error.message; // Showing the error does not seem to work
+      return;
+    }
 
-  if (deletedAttendee) {
-    attendee.value = await getAttendee();
+    let { data } = await getAttendee();
   }
 }
 
-async function addAttendee(firstname, lastname, rating) {
-  let addedAttendee = null;
-
+async function addAttendee(firstname: any, lastname: any, rating: any) {
   if (firstname && lastname && rating) {
-    addedAttendee = await useFetch('/api/attendee/add', {
-      method: 'POST',
-      body: {
-        userId: 1, // Todo make this depending on the user that has login
-        firstname: firstname,
-        lastname: lastname,
-        rating: rating,
-      },
-    });
-  }
+    try {
+      await useFetch('/api/attendee/add', {
+        method: 'POST',
+        body: {
+          userId: 1, // Todo make this depending on the user that has login
+          firstname: firstname,
+          lastname: lastname,
+          rating: rating,
+        },
+      });
+    } catch (error: any) {
+      errorMessage = error.message; // Showing the error does not seem to work
+      return;
+    }
 
-  if (addedAttendee) {
-    attendee.value = await getAttendee();
-  }
-}
-
-async function editAttendee(editedAttendee) {
-  let editAttendee = null;
-
-  if (editedAttendee.firstname && editAttendee.lastname && editAttendee.rating) {
-    editAttendee = await useFetch('/api/attendee', {
-      method: 'PUT',
-      body: {
-        firstname: editedAttendee.firstname,
-        lastname: editedAttendee.lastname,
-        rating: editedAttendee.rating,
-      },
-    });
-  }
-
-  if (editAttendee) {
-    attendee.value = await getAttendee();
+    let { data: attendee } = await getAttendee();
+    isOpen.value = false;
   }
 }
+
+// async function editAttendee(editedAttendee) {
+//   let editAttendee = null;
+
+//   if (editedAttendee.firstname && editAttendee.lastname && editAttendee.rating) {
+//     editAttendee = await useFetch('/api/attendee', {
+//       method: 'PUT',
+//       body: {
+//         firstname: editedAttendee.firstname,
+//         lastname: editedAttendee.lastname,
+//         rating: editedAttendee.rating,
+//       },
+//     });
+//   }
+
+//   if (editAttendee) {
+//     attendee.value = await getAttendee();
+//   }
+// }
 </script>

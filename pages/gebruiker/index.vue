@@ -5,7 +5,7 @@
         <h1>Overzicht gebruikers</h1>
       </div>
 
-      <button @click="isOpen = true" class="btn" type="button">Toevoegen gebruiker</button>
+      <button @click="isOpen = true" class="btn" type="button">Gebruiker toevoegen</button>
 
       <div v-show="isOpen" class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50">
         <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">

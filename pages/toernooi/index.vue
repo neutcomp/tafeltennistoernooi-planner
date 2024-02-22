@@ -25,7 +25,7 @@
                 {{ $dayjs(tournament.createdAt).format('DD-MM-YYYY') }}
               </td>
               <td class="px-6 py-4">
-                <button @click="editTournament(tournament.id)" class="btn">edit</button>
+                <button @click.prevent="$event => editTournament(name)" class="btn">edit</button>
                 <button @click="deleteTournament(tournament.id)" class="btn-red">delete</button>
               </td>
             </tr>
@@ -37,12 +37,32 @@
 </template>
 
 <script setup>
-let tournaments = await getTournaments();
+const tournaments = await getTournaments();
 
 // Below functions should move to the component Tournament.vue
 async function getTournaments() {
   return await $fetch('/api/tournament');
 }
+
+// async function editTournament(editedUser: userType) {
+//   if (editedUser.name) {
+//     try {
+//       await $fetch('/api/tournament', {
+//         method: 'GET',
+//         body: {
+//           id: editedUser.id,
+//           userId: 1,
+//           name: editedUser.name,
+//         },
+//       });
+//     } catch (error: any) {
+//       errorMessage = error.message;
+//       return;
+//     }
+
+//     tournaments = await getTournaments();
+//   }
+// }
 
 async function deleteTournament(id) {
   if (id) {

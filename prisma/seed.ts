@@ -3,12 +3,13 @@ import prisma from '../db/db';
 async function main() {
   await prisma.user.create({
     data: {
-      email: 'bjornvdneut@gmail.com',
       firstname: 'Bjorn',
       lastname: 'van der Neut',
+      email: 'bjornvdneut@gmail.com',
     },
   });
 }
+
 main()
   .then(async () => {
     await prisma.$disconnect();

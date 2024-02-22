@@ -7,21 +7,15 @@
         <form class="max-w-sm mx-auto">
           <div class="mb-3">
             <label for="name">Naam</label>
-            <input
-              type="input"
-              id="name"
-              v-model="name"
-              class="w-96"
-              placeholder="Jeugd clubkampioenschappen 2024"
-              required
-            />
+            <input type="input" id="name" v-model="name" class="w-96" placeholder="Jeugd clubkampioenschappen 2024"
+              required />
           </div>
           <div id="error" class="error">{{ errorMessage }}</div>
         </form>
       </div>
       <div class="mt-4">
         <button @click="isOpen = false" class="px-6 py-2 text-blue-800 border border-blue-600 rounded">Cancel</button>
-        <button type="submit" @click.prevent="addTournament(name)" class="btn">Voeg toernooi toe</button>
+        <button type="submit" @click.prevent="$event => addTournament(name)" class="btn">Voeg toernooi toe</button>
       </div>
     </div>
   </div>
@@ -29,6 +23,7 @@
 
 <script lang="ts" setup>
 interface userType {
+  id: number;
   name: string;
 }
 
@@ -56,8 +51,8 @@ async function addTournament(name: any) {
       return;
     }
 
-    tournaments = await getTournaments(); // Refreshing the data does not seem to work
-    isOpen = ref(false); // Closing the modal does not seem to work
+    let tournaments = await getTournaments(); // Refreshing the data does not seem to work
+    isOpen.value = false;
   }
 }
 
@@ -67,8 +62,9 @@ async function editTournament(editedUser: userType) {
       await $fetch('/api/tournament', {
         method: 'GET',
         body: {
+          id: editedUser.id,
           userId: 1,
-          name: name,
+          name: editedUser.name,
         },
       });
     } catch (error: any) {
