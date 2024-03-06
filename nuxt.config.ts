@@ -38,10 +38,17 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  modules: ['nuxt-icon', 'dayjs-nuxt'],
+  auth: {
+    origin: process.env.AUTH_ORIGIN,
+    provider: {
+      type: 'authjs'
+    }
+  },
+  modules: ['nuxt-icon', 'dayjs-nuxt', 'nuxt-server-utils', '@sidebase/nuxt-auth'],
   runtimeConfig: {
     DB_SERVER: process.env.DB_SERVER,
     DB_USERNAME: process.env.DB_USERNAME,
     DB_PASSWORD: process.env.DB_PASSWORD,
+    AUTH_SECRET: process.env.AUTH_SECRET
   },
 });

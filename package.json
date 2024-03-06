@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "joi": "^17.12.1",
-    "next-auth": "^4.24.6",
+    "next-auth": "4.21.1",
     "nuxt": "^3.10.0",
     "nuxt-server-utils": "^0.0.7",
     "vue": "^3.4.15",
