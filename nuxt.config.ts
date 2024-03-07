@@ -44,7 +44,7 @@ export default defineNuxtConfig({
       type: 'authjs'
     }
   },
-  modules: ['nuxt-icon', 'dayjs-nuxt', 'nuxt-server-utils', '@sidebase/nuxt-auth'],
+  modules: ['nuxt-icon', 'dayjs-nuxt', 'nuxt-server-utils'], // '@sidebase/nuxt-auth'
   runtimeConfig: {
     DB_SERVER: process.env.DB_SERVER,
     DB_USERNAME: process.env.DB_USERNAME,
