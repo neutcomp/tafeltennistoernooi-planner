@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://tafeltennistoernooi:mypassword@tafeltennistoernooiplanner-mysql.mysql.database.azure.com:3306/tafeltennistoernooi"
+  url      = env("DATABASE_URL")
 }
 
 model attendee {
