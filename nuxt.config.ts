@@ -47,5 +47,6 @@ export default defineNuxtConfig({
   modules: ['nuxt-icon', 'dayjs-nuxt', 'nuxt-server-utils'], // '@sidebase/nuxt-auth'
   runtimeConfig: {
     AUTH_SECRET: process.env.AUTH_SECRET,
+    DATABASE_URL: process.env.DATABASE_URL,
   },
 });
