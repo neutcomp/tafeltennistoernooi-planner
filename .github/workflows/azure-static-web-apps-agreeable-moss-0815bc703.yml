@@ -32,6 +32,10 @@ jobs:
           api_location: '.output/server' # Api source code path - optional
           output_location: '.output/public' # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+      - name: Run the Prisma migration deploy script
+          run: npx prisma migrate deploy
+          env:
+            DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -44,10 +48,3 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_AGREEABLE_MOSS_0815BC703 }}
           action: 'close'
-
-  run_db_script:
-    steps:
-      - name: Run the Prisma migration deploy script
-        run: npx prisma migrate deploy
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
