@@ -1,6 +1,15 @@
 import prisma from '../../../db/db';
+import { getServerSession } from '#auth'
 
-export default defineEventHandler(async event => {
+export default eventHandler(async event => {
+  const session = await getServerSession(event);
+
+  // If not authenticated do nothing
+  if (!session) {
+    return { statusMessage: 'unauthenticated' }
+  }
+
+  const token = await getTokenId(event);
   const body = await readBody(event);
 
   // Validate attendee
@@ -38,7 +47,7 @@ export default defineEventHandler(async event => {
   // Create attendee
   const attendee = await prisma.attendee.create({
     data: {
-      userId: body.userId,
+      userId: String(token),
       firstname: body.firstname,
       lastname: body.lastname,
       rating: Number(body.rating),

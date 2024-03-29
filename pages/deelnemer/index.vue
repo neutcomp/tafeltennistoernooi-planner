@@ -111,7 +111,6 @@ async function addAttendee(firstname: any, lastname: any, rating: any) {
       await useFetch('/api/attendee/add', {
         method: 'POST',
         body: {
-          userId: 'test', // Todo: make this depending on the user that has login
           firstname: firstname,
           lastname: lastname,
           rating: rating,
