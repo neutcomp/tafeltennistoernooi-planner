@@ -24,6 +24,10 @@
 </template>
 
 <script lang="ts">
+definePageMeta({
+	middleware: 'auth'
+})
+
 export default {
 	name: "tournamentAdd",
 	methods: {

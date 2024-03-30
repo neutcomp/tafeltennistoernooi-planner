@@ -53,16 +53,22 @@ export const checkAuthentication = (event: H3Event) => {
 export const getTokenId = async (event: H3Event) => {
     const session = await getServerSession(event);
 
-    // Get the JWT token from the DB
-    const token = await prisma.user.findFirst({
-        where: {
+    // If not authenticated do nothing
+    if (session) {
 
-            email: { equals: session?.user?.email },
-        },
-        select: {
-            id: true,
-        },
-    });
 
-    return token?.id
+        // Get the JWT token from the DB
+        const token = await prisma.user.findFirst({
+            where: {
+                email: { equals: session?.user?.email },
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        return token?.id
+    } else {
+        return ''
+    }
 }

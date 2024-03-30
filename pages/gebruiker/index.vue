@@ -70,6 +70,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+	middleware: 'auth'
+})
+
 const isOpen = ref(false);
 
 const { data: users } = await getUsers();

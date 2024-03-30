@@ -70,6 +70,10 @@
 </template>
 
 <script lang="ts" setup>
+definePageMeta({
+  middleware: 'auth'
+})
+
 const isOpen = ref(false);
 let errorMessage = ref(null);
 let { data: attendees } = await getAttendee();

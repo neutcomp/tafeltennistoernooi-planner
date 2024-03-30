@@ -7,13 +7,13 @@
           <NuxtLink to="/" class="btn">Home</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/deelnemer/" class="btn">Deelnemers overzicht</NuxtLink>
+          <NuxtLink v-if="loggedIn" to="/deelnemer/" class="btn">Deelnemers overzicht</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/toernooi/" class="btn">Toernooi overzicht</NuxtLink>
+          <NuxtLink v-if="loggedIn" to="/toernooi/" class="btn">Toernooi overzicht</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/gebruiker/" class="btn">Gebruiker overzicht</NuxtLink>
+          <NuxtLink v-if="loggedIn" to="/gebruiker/" class="btn">Gebruiker overzicht</NuxtLink>
         </li>
       </ul>
     </nav>
@@ -21,4 +21,14 @@
 </template>
 
 <script setup>
+const { status, signIn, signOut } = useAuth();
+const loggedIn = computed(() => status.value === 'authenticated')
+
+async function handleLogin() {
+  await signIn()
+}
+
+async function handleLogout() {
+  await signOut()
+}
 </script>

@@ -24,6 +24,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+	middleware: 'auth'
+})
+
 const { id } = useRoute().params
 const uri = '/api/user/' + id
 

@@ -37,6 +37,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+  middleware: 'auth'
+})
+
 const tournaments = await getTournaments();
 
 // Below functions should move to the component Tournament.vue
