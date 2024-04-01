@@ -1,6 +1,15 @@
 import prisma from '../../../db/db';
+import { getServerSession } from '#auth'
 
-export default defineEventHandler(async event => {
+export default eventHandler(async event => {
+  const session = await getServerSession(event);
+
+  // If not authenticated do nothing
+  if (!session) {
+    return { statusMessage: 'unauthenticated' }
+  }
+
+  const token = await getTokenId(event);
   const body = await readBody(event);
 
   // Validate user
@@ -19,7 +28,7 @@ export default defineEventHandler(async event => {
 
   // Check if tournament exists
   const userExist = await prisma.tournament.findFirst({
-    where: { name: body.name },
+    where: { name: body.name, userId: String(token) },
   });
 
   if (userExist) {
@@ -32,7 +41,7 @@ export default defineEventHandler(async event => {
   // Create tournament
   const tournament = await prisma.tournament.create({
     data: {
-      userId: body.userId, // Todo make this depending on the user that has login
+      userId: String(token),
       name: body.name,
     },
   });

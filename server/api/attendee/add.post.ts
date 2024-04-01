@@ -31,6 +31,7 @@ export default eventHandler(async event => {
     where: {
       firstname: { equals: body.firstname },
       lastname: { equals: body.lastname },
+      userId: { equals: String(token) }
     },
     select: {
       id: true,
