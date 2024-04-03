@@ -92,20 +92,22 @@ async function getAttendee() {
 }
 
 async function deleteAttendee(id: number) {
-  if (id) {
-    try {
-      await useFetch('/api/attendee/attendee', {
-        method: 'DELETE',
-        body: {
-          id: id,
-        },
-      });
-    } catch (error: any) {
-      errorMessage = error.message; // Showing the error does not seem to work
-      return;
-    }
+  if (confirm('Weet je het zeker?')) {
+    if (id) {
+      try {
+        await useFetch('/api/attendee/attendee', {
+          method: 'DELETE',
+          body: {
+            id: id,
+          },
+        });
+      } catch (error: any) {
+        errorMessage = error.message; // Showing the error does not seem to work
+        return;
+      }
 
-    let { data } = await getAttendee();
+      await getAttendee();
+    }
   }
 }
 
@@ -125,7 +127,6 @@ async function addAttendee(firstname: any, lastname: any, rating: any) {
       return;
     }
 
-    let { data: attendee } = await getAttendee();
     isOpen.value = false;
   }
 }

@@ -27,19 +27,19 @@ interface userType {
   name: string;
 }
 
-let tournaments = await getTournaments();
+let { data: tournaments } = await getTournaments();
 let isOpen = ref(false);
 let errorMessage = ref(null);
 const name = ref(null);
 
 async function getTournaments() {
-  return await $fetch('/api/tournament');
+  return await useFetch('/api/tournament');
 }
 
 async function addTournament(name: any) {
   if (name) {
     try {
-      await $fetch('/api/tournament/add', {
+      await useFetch('/api/tournament/add', {
         method: 'POST',
         body: {
           userId: 1, // Todo make this depending on the user that has login
@@ -51,7 +51,7 @@ async function addTournament(name: any) {
       return;
     }
 
-    let tournaments = await getTournaments(); // Refreshing the data does not seem to work
+    await getTournaments(); // Refreshing the data does not seem to work
     isOpen.value = false;
   }
 }
@@ -72,7 +72,7 @@ async function editTournament(editedUser: userType) {
       return;
     }
 
-    tournaments = await getTournaments();
+    await getTournaments();
   }
 }
 </script>

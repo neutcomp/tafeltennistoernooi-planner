@@ -41,11 +41,11 @@ definePageMeta({
   middleware: 'auth'
 })
 
-const tournaments = await getTournaments();
+const { data: tournaments } = await getTournaments();
 
 // Below functions should move to the component Tournament.vue
 async function getTournaments() {
-  return await $fetch('/api/tournament');
+  return await useFetch('/api/tournament');
 }
 
 // async function editTournament(editedUser: userType) {
@@ -69,20 +69,22 @@ async function getTournaments() {
 // }
 
 async function deleteTournament(id) {
-  if (id) {
-    try {
-      await $fetch('/api/tournament/tournament', {
-        method: 'DELETE',
-        body: {
-          id: id,
-        },
-      });
-    } catch (error) {
-      errorMessage = error.message;
-      return;
-    }
+  if (confirm('Weet je het zeker?')) {
+    if (id) {
+      try {
+        await useFetch('/api/tournament/tournament', {
+          method: 'DELETE',
+          body: {
+            id: id,
+          },
+        });
+      } catch (error) {
+        errorMessage = error.message;
+        return;
+      }
 
-    this.tournaments = await getTournaments();
+      await getTournaments();
+    }
   }
 }
 </script>
