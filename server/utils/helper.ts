@@ -45,8 +45,6 @@ export const TournamentDeleteSchema = Joi.object({
 export const cookieName = 'isAuthenticated'
 
 export const checkAuthentication = (event: H3Event) => {
-    console.log(event.context);
-
     return Boolean(event.context?.user);
 }
 

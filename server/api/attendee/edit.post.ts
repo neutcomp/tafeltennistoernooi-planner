@@ -1,5 +1,6 @@
 import prisma from '../../../db/db';
 import { getServerSession } from '#auth'
+import dayjs from 'dayjs';
 
 export default eventHandler(async event => {
   // Only allow POST requests
@@ -32,8 +33,7 @@ export default eventHandler(async event => {
   // Check if attendee exists
   const attendeeExist = await prisma.attendee.findFirst({
     where: {
-      firstname: { equals: body.firstname },
-      lastname: { equals: body.lastname },
+      id: { equals: body.id },
       userId: { equals: String(token) }
     },
     select: {
@@ -41,20 +41,23 @@ export default eventHandler(async event => {
     },
   });
 
-  if (attendeeExist) {
+  if (!attendeeExist) {
     throw createError({
       statusCode: 200,
-      statusMessage: 'Sorry deze deelnemer bestaat al',
+      statusMessage: 'Sorry deze deelnemer bestaat niet',
     });
   }
 
-  // Create attendee
-  const attendee = await prisma.attendee.create({
+  // Update attendee
+  const attendee = await prisma.attendee.update({
+    where: {
+      id: body.id,
+    },
     data: {
-      userId: String(token),
       firstname: body.firstname,
       lastname: body.lastname,
       rating: Number(body.rating),
+      updatedAt: dayjs().format()
     },
   });
 

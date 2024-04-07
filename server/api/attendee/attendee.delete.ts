@@ -1,6 +1,9 @@
 import prisma from '../../../db/db';
 
 export default defineEventHandler(async event => {
+  // Only allow POST requests
+  assertMethod(event, ['POST']);
+
   const body = await readBody(event);
 
   // Validate attendee

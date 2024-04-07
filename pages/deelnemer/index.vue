@@ -58,7 +58,7 @@
                 {{ attendee.rating }}
               </td>
               <td class="px-6 py-4">
-                <button @click="isOpen = true" class="btn" type="button">edit</button>
+                <NuxtLink :to="`/deelnemer/${attendee.id}`" class="btn" type="button">edit</NuxtLink>
                 <button @click="deleteAttendee(attendee.id)" class="btn-red">delete</button>
               </td>
             </tr>
@@ -74,18 +74,14 @@ definePageMeta({
   middleware: 'auth'
 })
 
-const isOpen = ref(false);
+let isOpen = ref(false);
 let errorMessage = ref(null);
 let { data: attendees } = await getAttendee();
 const firstname = ref(null);
 const lastname = ref(null);
 const rating = ref(null);
 
-const editedAttendee = ref({
-  firstname: null,
-  lastname: null,
-  rating: null,
-});
+
 
 async function getAttendee() {
   return await useFetch('/api/attendee');
@@ -130,23 +126,4 @@ async function addAttendee(firstname: any, lastname: any, rating: any) {
     isOpen.value = false;
   }
 }
-
-// async function editAttendee(editedAttendee) {
-//   let editAttendee = null;
-
-//   if (editedAttendee.firstname && editAttendee.lastname && editAttendee.rating) {
-//     editAttendee = await useFetch('/api/attendee', {
-//       method: 'PUT',
-//       body: {
-//         firstname: editedAttendee.firstname,
-//         lastname: editedAttendee.lastname,
-//         rating: editedAttendee.rating,
-//       },
-//     });
-//   }
-
-//   if (editAttendee) {
-//     attendee.value = await getAttendee();
-//   }
-// }
 </script>
