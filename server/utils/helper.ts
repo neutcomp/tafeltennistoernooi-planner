@@ -17,7 +17,7 @@ export const UserUpdateSchema = Joi.object({
 })
 
 export const UserDeleteSchema = Joi.object({
-    id: Joi.number().required()
+    id: Joi.string().required()
 })
 
 export const LoginSchema = Joi.object({

@@ -10,6 +10,7 @@
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">Email</th>
+              <th scope="col" class="px-6 py-3"></th>
             </tr>
           </thead>
           <tbody>
@@ -18,7 +19,7 @@
                 {{ user.email }}
               </td>
               <td class="px-6 py-4">
-                <button @click="deleteUser(user.id)" class="btn-red">delete</button>
+                <button @click="deleteUser(user.id);" class="btn-red">delete</button>
               </td>
             </tr>
           </tbody>
@@ -28,31 +29,53 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts">
 definePageMeta({
   middleware: 'auth'
 })
 
-const { data: users } = await getUsers();
+export default {
+  name: 'user',
+  data() {
+    return {
+      errorMessage: '',
+      users: [{
+        id: '',
+        email: ''
+      }]
+    }
+  },
+  async mounted() {
+    await this.getUsers();
+  },
+  methods: {
+    async getUsers() {
+      const { data } = await useFetch('/api/user');
 
-async function getUsers() {
-  return await useFetch('/api/user');
-}
+      if (data) {
+        //@ts-ignore
+        this.users = data;
+      }
+    },
+    async deleteUser(id: string) {
+      if (confirm('Weet je het zeker?')) {
+        if (id) {
+          try {
+            await useFetch('/api/user/delete', {
+              method: 'DELETE',
+              body: {
+                id: id,
+              },
+            });
+          } catch (error: any) {
+            this.errorMessage = error.message;
+            return;
+          }
 
-async function deleteUser(id) {
-  let deletedUser = null;
-
-  if (id) {
-    deletedUser = await useFetch('/api/user/user', {
-      method: 'DELETE',
-      body: {
-        id: id,
-      },
-    });
-  }
-
-  if (deletedUser) {
-    users.value = await getUsers();
+          await this.getUsers();
+        }
+      }
+    }
   }
 }
 </script>

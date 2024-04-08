@@ -36,7 +36,7 @@
             <tr>
               <th scope="col" class="px-6 py-3">Naam</th>
               <th scope="col" class="px-6 py-3">Datum</th>
-              <th scope="col" class="px-6 py-3">Edit</th>
+              <th scope="col" class="px-6 py-3"></th>
             </tr>
           </thead>
           <tbody>

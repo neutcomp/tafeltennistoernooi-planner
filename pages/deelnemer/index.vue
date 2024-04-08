@@ -48,7 +48,7 @@
               <th scope="col" class="px-6 py-3">Voornaam</th>
               <th scope="col" class="px-6 py-3">Achternaam</th>
               <th scope="col" class="px-6 py-3">Rating</th>
-              <th scope="col" class="px-6 py-3">Edit</th>
+              <th scope="col" class="px-6 py-3"></th>
             </tr>
           </thead>
           <tbody>
@@ -102,7 +102,7 @@ export default {
     }
   },
   async mounted() {
-    await this.getAttendees()
+    await this.getAttendees();
   },
   methods: {
     async resetAttendee() {
@@ -125,7 +125,7 @@ export default {
       }
     },
     async getAttendees() {
-      const { data } = await useFetch('/api/attendee')
+      const { data } = await useFetch('/api/attendee');
 
       if (data) {
         //@ts-ignore
