@@ -5,7 +5,8 @@
         <h1>Overzicht deelnemers</h1>
       </div>
 
-      <button @click="isOpen = true" class="btn" type="button">Deelnemers toevoegen</button>
+      <button @click="isOpen = true; resetAttendee()" class="btn" type="button">Deelnemers
+        toevoegen</button>
 
       <div v-show="isOpen" class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50">
         <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">
@@ -29,7 +30,11 @@
             <button @click="isOpen = false" class="px-6 py-2 text-blue-800 border border-blue-600 rounded">
               Cancel
             </button>
-            <button type="submit" @click.prevent="addAttendee(attendee)" class="btn">
+
+            <button v-if="attendee.id" type="submit" @click.prevent="updateAttendee(attendee)" class="btn">
+              Update deelnemer
+            </button>
+            <button v-else type="submit" @click.prevent="addAttendee(attendee)" class="btn">
               Voeg deelnemer toe
             </button>
           </div>
@@ -58,7 +63,8 @@
                 {{ attendee.rating }}
               </td>
               <td class="px-6 py-4">
-                <NuxtLink :to="`/deelnemer/${attendee.id}`" class="btn" type="button">edit</NuxtLink>
+                <NuxtLink @click="isOpen = true; getAttendee(Number(attendee.id))" class="btn" type="button">edit
+                </NuxtLink>
                 <button @click="deleteAttendee(Number(attendee.id))" class="btn-red">delete</button>
               </td>
             </tr>
@@ -96,10 +102,31 @@ export default {
     }
   },
   async mounted() {
-    await this.getAttendee()
+    await this.getAttendees()
   },
   methods: {
-    async getAttendee() {
+    async resetAttendee() {
+      this.attendee.id = '';
+      this.attendee.firstname = '';
+      this.attendee.lastname = '';
+      this.attendee.rating = '';
+    },
+    async getAttendee(attendeeId: number) {
+      const { data } = await useFetch('/api/attendee/get', {
+        method: 'POST',
+        body: {
+          id: attendeeId
+        }
+      })
+
+      if (data) {
+        //@ts-ignore
+        this.attendee = data;
+      }
+
+
+    },
+    async getAttendees() {
       const { data } = await useFetch('/api/attendee')
 
       if (data) {
@@ -122,7 +149,7 @@ export default {
             return;
           }
 
-          await this.getAttendee();
+          await this.getAttendees();
         }
       }
     },
@@ -141,6 +168,25 @@ export default {
           this.errorMessage = error.message; // Showing the error does not seem to work
           return;
         }
+
+        await this.getAttendees();
+
+        this.isOpen = false;
+      }
+    },
+    async updateAttendee(attendee: any) {
+      if (attendee.firstname && attendee.lastname && attendee.rating) {
+        await useFetch('/api/attendee/edit', {
+          method: 'POST',
+          body: {
+            id: attendee.id,
+            firstname: attendee.firstname,
+            lastname: attendee.lastname,
+            rating: attendee.rating,
+          },
+        });
+
+        await this.getAttendees();
 
         this.isOpen = false;
       }
