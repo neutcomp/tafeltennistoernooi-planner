@@ -34,7 +34,7 @@ definePageMeta({
 })
 
 export default {
-	name: 'attendee',
+	name: 'attendee-edit',
 	data() {
 		return {
 			attendeeId: '',

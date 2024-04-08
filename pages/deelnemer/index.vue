@@ -13,15 +13,15 @@
             <form class="max-w-sm mx-auto">
               <div class="mb-3">
                 <label for="firstname">Voornaam</label>
-                <input type="input" id="firstname" v-model="firstname" placeholder="Ruben" required />
+                <input type="input" id="firstname" v-model="attendee.firstname" placeholder="Ruben" required />
               </div>
               <div class="mb-3">
                 <label for="lastname">Achternaam</label>
-                <input type="input" id="lastname" v-model="lastname" placeholder="van der Neut" required />
+                <input type="input" id="lastname" v-model="attendee.lastname" placeholder="van der Neut" required />
               </div>
               <div class="mb-3">
                 <label for="rating">Rating</label>
-                <input type="input" id="rating" v-model="rating" placeholder="431" required />
+                <input type="input" id="rating" v-model="attendee.rating" placeholder="431" required />
               </div>
             </form>
           </div>
@@ -29,7 +29,7 @@
             <button @click="isOpen = false" class="px-6 py-2 text-blue-800 border border-blue-600 rounded">
               Cancel
             </button>
-            <button type="submit" @click.prevent="addAttendee(firstname, lastname, rating)" class="btn">
+            <button type="submit" @click.prevent="addAttendee(attendee)" class="btn">
               Voeg deelnemer toe
             </button>
           </div>
@@ -59,7 +59,7 @@
               </td>
               <td class="px-6 py-4">
                 <NuxtLink :to="`/deelnemer/${attendee.id}`" class="btn" type="button">edit</NuxtLink>
-                <button @click="deleteAttendee(attendee.id)" class="btn-red">delete</button>
+                <button @click="deleteAttendee(Number(attendee.id))" class="btn-red">delete</button>
               </td>
             </tr>
           </tbody>
@@ -69,61 +69,82 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts">
 definePageMeta({
   middleware: 'auth'
 })
 
-let isOpen = ref(false);
-let errorMessage = ref(null);
-let { data: attendees } = await getAttendee();
-const firstname = ref(null);
-const lastname = ref(null);
-const rating = ref(null);
-
-
-
-async function getAttendee() {
-  return await useFetch('/api/attendee');
-}
-
-async function deleteAttendee(id: number) {
-  if (confirm('Weet je het zeker?')) {
-    if (id) {
-      try {
-        await useFetch('/api/attendee/attendee', {
-          method: 'DELETE',
-          body: {
-            id: id,
-          },
-        });
-      } catch (error: any) {
-        errorMessage = error.message; // Showing the error does not seem to work
-        return;
+export default {
+  name: 'attendee',
+  data() {
+    return {
+      isOpen: false,
+      errorMessage: '',
+      attendeeId: '',
+      attendees: [{
+        id: '',
+        firstname: '',
+        lastname: '',
+        rating: ''
+      }],
+      attendee: {
+        id: '',
+        firstname: '',
+        lastname: '',
+        rating: ''
       }
-
-      await getAttendee();
     }
-  }
-}
+  },
+  async mounted() {
+    await this.getAttendee()
+  },
+  methods: {
+    async getAttendee() {
+      const { data } = await useFetch('/api/attendee')
 
-async function addAttendee(firstname: any, lastname: any, rating: any) {
-  if (firstname && lastname && rating) {
-    try {
-      await useFetch('/api/attendee/add', {
-        method: 'POST',
-        body: {
-          firstname: firstname,
-          lastname: lastname,
-          rating: rating,
-        },
-      });
-    } catch (error: any) {
-      errorMessage = error.message; // Showing the error does not seem to work
-      return;
+      if (data) {
+        //@ts-ignore
+        this.attendees = data;
+      }
+    },
+    async deleteAttendee(id: number) {
+      if (confirm('Weet je het zeker?')) {
+        if (id) {
+          try {
+            await useFetch('/api/attendee/attendee', {
+              method: 'DELETE',
+              body: {
+                id: id,
+              },
+            });
+          } catch (error: any) {
+            this.errorMessage = error.message; // Showing the error does not seem to work
+            return;
+          }
+
+          await this.getAttendee();
+        }
+      }
+    },
+    async addAttendee(attendee: any) {
+      if (attendee.firstname && attendee.lastname && attendee.rating) {
+        try {
+          await useFetch('/api/attendee/add', {
+            method: 'POST',
+            body: {
+              firstname: attendee.firstname,
+              lastname: attendee.lastname,
+              rating: attendee.rating,
+            },
+          });
+        } catch (error: any) {
+          this.errorMessage = error.message; // Showing the error does not seem to work
+          return;
+        }
+
+        this.isOpen = false;
+      }
     }
-
-    isOpen.value = false;
   }
 }
 </script>
