@@ -1,6 +1,9 @@
 import prisma from '../../../db/db';
 
 export default defineEventHandler(async event => {
+   // Only allow DELETE requests
+   assertMethod(event, ['DELETE']);
+
   const body = await readBody(event);
 
   // Validate user
@@ -25,7 +28,7 @@ export default defineEventHandler(async event => {
   if (tournamentExist === null) {
     throw createError({
       statusCode: 200,
-      statusMessage: 'Sorry deze gebruiker bestaat niet',
+      statusMessage: 'Sorry dit tournooi bestaat niet',
     });
   }
 

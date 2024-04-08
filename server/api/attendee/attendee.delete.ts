@@ -28,7 +28,7 @@ export default defineEventHandler(async event => {
   if (attendeeExist === null) {
     throw createError({
       statusCode: 200,
-      statusMessage: 'Sorry dit toernooi bestaat niet',
+      statusMessage: 'Sorry deze deelnemer bestaat niet',
     });
   }
 

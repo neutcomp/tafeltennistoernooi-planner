@@ -24,13 +24,13 @@
                 <label for="rating">Rating</label>
                 <input type="input" id="rating" v-model="attendee.rating" placeholder="431" required />
               </div>
+              <div id="error" class="error">{{ errorMessage }}</div>
             </form>
           </div>
           <div class="mt-4">
             <button @click="isOpen = false" class="px-6 py-2 text-blue-800 border border-blue-600 rounded">
               Cancel
             </button>
-
             <button v-if="attendee.id" type="submit" @click.prevent="updateAttendee(attendee)" class="btn">
               Update deelnemer
             </button>
@@ -123,8 +123,6 @@ export default {
         //@ts-ignore
         this.attendee = data;
       }
-
-
     },
     async getAttendees() {
       const { data } = await useFetch('/api/attendee')
@@ -145,7 +143,7 @@ export default {
               },
             });
           } catch (error: any) {
-            this.errorMessage = error.message; // Showing the error does not seem to work
+            this.errorMessage = error.message;
             return;
           }
 
@@ -165,7 +163,7 @@ export default {
             },
           });
         } catch (error: any) {
-          this.errorMessage = error.message; // Showing the error does not seem to work
+          this.errorMessage = error.message;
           return;
         }
 
@@ -176,15 +174,20 @@ export default {
     },
     async updateAttendee(attendee: any) {
       if (attendee.firstname && attendee.lastname && attendee.rating) {
-        await useFetch('/api/attendee/edit', {
-          method: 'POST',
-          body: {
-            id: attendee.id,
-            firstname: attendee.firstname,
-            lastname: attendee.lastname,
-            rating: attendee.rating,
-          },
-        });
+        try {
+          await useFetch('/api/attendee/edit', {
+            method: 'POST',
+            body: {
+              id: attendee.id,
+              firstname: attendee.firstname,
+              lastname: attendee.lastname,
+              rating: attendee.rating,
+            },
+          });
+        } catch (error: any) {
+          this.errorMessage = error.message;
+          return;
+        }
 
         await this.getAttendees();
 

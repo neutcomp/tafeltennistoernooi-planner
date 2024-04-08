@@ -8,15 +8,12 @@ export default defineEventHandler(async event => {
   const token = await getTokenId(event);
   const body = await readBody(event);
 
-  const attendee = prisma.attendee.findFirstOrThrow({
-    where: {
-      id: body.id,
-      userId: { equals: String(token)}
-    },
+  const tournaments = prisma.tournament.findFirstOrThrow({
+    where: { id: body.id, userId: String(token) },
     select: {
-      id: true, firstname: true, lastname: true, rating: true
+      id: true, name: true
     }
   });
 
-  return attendee;
+  return tournaments;
 });
