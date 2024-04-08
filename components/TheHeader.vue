@@ -15,6 +15,10 @@
         <li>
           <NuxtLink v-if="loggedIn" to="/gebruiker/" class="btn">Gebruiker overzicht</NuxtLink>
         </li>
+        <li>
+          <NuxtLink class="btn" v-if="loggedIn" @click="handleLogout">Logout</NuxtLink>
+          <NuxtLink class="btn" v-else @click="handleLogin">Login</NuxtLink>
+        </li>
       </ul>
     </nav>
   </header>
