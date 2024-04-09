@@ -33,6 +33,8 @@ async function handleLogin() {
 }
 
 async function handleLogout() {
-  await signOut()
+  if (confirm('Weet je zeker dat je wilt uitloggen?')) {
+    await signOut()
+  }
 }
 </script>
