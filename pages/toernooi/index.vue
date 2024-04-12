@@ -49,6 +49,7 @@
               </td>
               <td class="px-6 py-4">
                 <button @click="isOpen = true; getTournament(Number(tournament.id))" class="btn">edit</button>
+                <NuxtLink :to="`/toernooi/${tournament.id}`" class="btn">deelnemers</NuxtLink>
                 <button @click="deleteTournament(Number(tournament.id))" class="btn-red">delete</button>
               </td>
             </tr>
