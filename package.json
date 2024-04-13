@@ -20,14 +20,15 @@
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "@nuxt/ui": "^2.15.2",
     "@nuxtjs/date-fns": "^1.5.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@prisma/client": "^5.11.0",
     "@sidebase/nuxt-auth": "^0.6.4",
     "@types/node": "^18.11.18",
     "dayjs-nuxt": "^2.1.9",
-    "nuxt-icon": "^0.6.8",
     "nuxt": "^3.11.1",
+    "nuxt-icon": "^0.6.8",
     "prisma": "^5.11.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^4.9.5"

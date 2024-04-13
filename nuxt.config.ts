@@ -46,7 +46,13 @@ export default defineNuxtConfig({
     //   isEnabled: true,
     // },
   },
-  modules: ['nuxt-icon', 'dayjs-nuxt', 'nuxt-server-utils', '@sidebase/nuxt-auth'],
+  modules: [
+    'nuxt-icon',
+    'dayjs-nuxt',
+    'nuxt-server-utils',
+    '@sidebase/nuxt-auth',
+    "@nuxt/ui"
+  ],
   typescript: {
     shim: false,
   },
