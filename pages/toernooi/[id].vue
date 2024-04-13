@@ -24,20 +24,23 @@ export default {
             const { data } = await useFetch('/api/attendee');
 
             if (data) {
+                //@ts-ignore
                 this.attendees = data;
             }
         },
         async addAttendee() {
-            console.log(this.selectedAttendees)
-            // try {
-            //     await useFetch('/api/attendee/add-attendees', {
-            //         method: 'POST',
-            //         body: this.selectedAttendees
-            //     });
-            // } catch (error: any) {
-            //     this.errorMessage = error.message;
-            //     return;
-            // }
+            try {
+                const route = useRoute()
+                const tournamentId = route.params.id;
+                await useFetch('/api/attendee/add-attendees', {
+                    method: 'POST',
+                    body: { tournamentId: tournamentId, attendees: this.selectedAttendees }
+                });
+            } catch (error: any) {
+                //@ts-ignore
+                this.errorMessage = error.message;
+                return;
+            }
         }
     }
 }

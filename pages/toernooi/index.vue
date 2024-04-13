@@ -124,6 +124,7 @@ export default {
               },
             });
           } catch (error) {
+            //@ts-ignore
             this.errorMessage = error.message;
             return;
           }
