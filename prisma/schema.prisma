@@ -22,7 +22,7 @@ model Account {
   session_state      String?
 
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  
   @@unique([provider, providerAccountId])
 }
 
@@ -67,6 +67,7 @@ model Attendee {
   updatedAt DateTime? @db.DateTime(0)
   
   user      User      @relation(fields: [userId], references: [id], onUpdate: Cascade)
+  tournamentAttendees TournamentAttendees[]
 
   @@unique([userId, firstname, lastname])
 }
@@ -78,8 +79,21 @@ model Tournament {
   createdAt DateTime @default(now()) @db.DateTime(0)
   updatedAt String?  @db.VarChar(45)
   
+  tournamentAttendees TournamentAttendees[]
   user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade)
 
   @@unique([userId, name])
+}
+
+model TournamentAttendees {
+  id           Int        @id @default(autoincrement())
+  tournamentId Int
+  attendeeId   Int
+
+  Attendee     Attendee   @relation(fields: [attendeeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "attendee_id_fkey")
+  Tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tournament_id_fkey")
+
+  @@index([attendeeId], map: "attendee_id_fkey_idx")
+  @@index([tournamentId], map: "tournament_id_fkey")
 }
 
