@@ -8,9 +8,7 @@ const prisma = new PrismaClient();
 
 export default NuxtAuthHandler({
   adapter: PrismaAdapter(prisma),
-  // TODO: SET A STRONG SECRET, SEE https://sidebase.io/nuxt-auth/configuration/nuxt-auth-handler#secret
   secret: process.env.NEXTAUTH_SECRET,
-  // TODO: ADD YOUR OWN AUTHENTICATION PROVIDER HERE, READ THE DOCS FOR MORE: https://sidebase.io/nuxt-auth
   providers: [
     // @ts-expect-error
     EmailProvider.default({
