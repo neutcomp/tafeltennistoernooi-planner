@@ -11,27 +11,27 @@
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
-    "@prisma/client": "^5.11.0",
-    "joi": "^17.12.1",
-    "nodemailer": "^6.9.12",
-    "nuxt": "^3.11.1",
+    "@prisma/client": "^5.12.1",
+    "joi": "^17.12.3",
+    "nodemailer": "^6.9.13",
+    "nuxt": "^3.11.2",
     "nuxt-server-utils": "^0.0.7",
-    "vue": "^3.4.15",
-    "vue-router": "^4.2.5"
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@nuxt/ui": "^2.15.2",
     "@nuxtjs/date-fns": "^1.5.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
-    "@prisma/client": "^5.11.0",
-    "@sidebase/nuxt-auth": "^0.6.4",
-    "@types/node": "^18.11.18",
+    "@prisma/client": "^5.12.1",
+    "@sidebase/nuxt-auth": "^0.7.1",
+    "@types/node": "^20.12.7",
     "dayjs-nuxt": "^2.1.9",
-    "nuxt": "^3.11.1",
-    "nuxt-icon": "^0.6.8",
-    "prisma": "^5.11.0",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^4.9.5"
+    "nuxt": "^3.11.2",
+    "nuxt-icon": "^0.6.10",
+    "prisma": "^5.12.1",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.5"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"
