@@ -58,6 +58,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     DATABASE_URL: process.env.DATABASE_URL,
+    DIRECT_URL: process.env.DIRECT_URL,
     NEXTAUTH_URL: process.env.AUTH_SECRET,
     NEXTAUTH_SECRET: process.env.AUTH_SECRET,
     EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,
