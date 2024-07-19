@@ -1,7 +1,7 @@
 <script lang="ts">
-definePageMeta({
-    middleware: 'auth'
-})
+// definePageMeta({
+//     middleware: 'auth'
+// })
 
 export default {
     name: 'tournamentAttendees',
@@ -32,7 +32,7 @@ export default {
             try {
                 const route = useRoute()
                 const tournamentId = route.params.id;
-                await useFetch('/api/attendee/add-attendees', {
+                await useFetch('/api/tournament/add-attendees', {
                     method: 'POST',
                     body: { tournamentId: tournamentId, attendees: this.selectedAttendees }
                 });

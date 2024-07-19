@@ -1,36 +1,33 @@
-import prisma from '../../../db/db';
-import { getServerSession } from '#auth'
+import supabase from '../../../config/supabaseClient'
 
 export default eventHandler(async event => {
-  const session = await getServerSession(event);
-
-  // If not authenticated do nothing
-  if (!session) {
-    return { statusMessage: 'unauthenticated' }
-  }
-
-  const token = await getTokenId(event);
   const body = await readBody(event);
 
   // Check if tournament exists
-  const userExist = await prisma.tournament.findFirst({
-    where: { id: body.tournamentId, userId: String(token) },
-  });
+  const { data, error } = await supabase.from('Tournament')
+    .select()
+    .eq('id', body.id)
 
-  if (!userExist) {
+  if (error) {
     throw createError({
       statusCode: 200,
-      statusMessage: 'Sorry dit toernooi bestaat niet',
+      statusMessage: 'Toernooi niet gevonden',
     });
-  }
+  } else {
+    // Loop trough all selected attendees and add them to the tournament
+    for (const attendeeId in body.attendees) {
+      // Add attendee to tournament
+      const { data: dataInserted, error: errorInsert } = await supabase.from('Tournament')
+        .insert({ tournamentId: body.tournamentId, attendeeId: Number(attendeeId) })
 
-  for (const attendeeId in body.attendees) {
-    // Add attendee to tournament
-    await prisma.tournamentAttendees.create({
-      data: {
-        tournamentId: body.tournamentId,
-        attendeeId: Number(attendeeId),
-      },
-    });
+      if (errorInsert) {
+        throw createError({
+          statusCode: 200,
+          statusMessage: 'Sorry er gaat iets mis bij het toevoegen van de deelnemer aan het toernooi',
+        });
+      }
+    }
+
+    return 'Alle deelnemers zijn toegevoegd aan het toernooi'
   }
 });

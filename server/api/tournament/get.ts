@@ -1,19 +1,20 @@
-import { getTokenId } from '~/server/utils/helper';
-import prisma from '../../../db/db';
+import supabase from '../../../config/supabaseClient'
 
 export default defineEventHandler(async event => {
   // Only allow POST requests
   assertMethod(event, ['POST']);
 
-  const token = await getTokenId(event);
   const body = await readBody(event);
 
-  const tournaments = prisma.tournament.findFirstOrThrow({
-    where: { id: body.id, userId: String(token) },
-    select: {
-      id: true, name: true
-    }
-  });
+  const { data, error } = await supabase.from('Tournament')
+    .select().eq('id', body.id)
 
-  return tournaments;
+  if (error) {
+    throw createError({
+      statusCode: 200,
+      statusMessage: 'Error in ophalen toernooi',
+    });
+  } else {
+    return data;
+  }
 });

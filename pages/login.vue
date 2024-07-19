@@ -1,16 +1,10 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+    const user = useSupabaseUser()
+</script>
+
 <template>
-    <div>
-        <h1 class="mb-4 text-xl font-bold">Login</h1>
-        <form>
-            <input class="w-full border p-2 rounded-lg mb-4" type="text" placeholder="Username" />
-            <input class="w-full border p-2 rounded-lg mb-4" type="password" placeholder="Password" />
-            <button type="submit"
-                class="bg-blue-500 hover:bg-blue-600 transition-all duration-200 w-full text-blue-50 rounded-lg p-2">
-                Login
-            </button>
-        </form>
+   <div class="container" style="padding: 50px 0 100px 0">
+        <Account v-if="user" />
+        <Auth v-else />
     </div>
 </template>
-
-<style></style>

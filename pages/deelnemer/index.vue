@@ -76,14 +76,15 @@
 </template>
 
 <script lang="ts">
-definePageMeta({
-  middleware: 'auth'
-})
+// definePageMeta({
+//   middleware: 'auth'
+// })
 
 export default {
   name: 'attendee',
   data() {
     return {
+      user: useSupabaseUser(),
       isOpen: false,
       errorMessage: '',
       attendeeId: '',
@@ -157,6 +158,7 @@ export default {
           await useFetch('/api/attendee/add', {
             method: 'POST',
             body: {
+              user: this.user,
               firstname: attendee.firstname,
               lastname: attendee.lastname,
               rating: attendee.rating,
