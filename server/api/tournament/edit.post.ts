@@ -1,63 +1,47 @@
-import prisma from '../../../db/db';
-import { getServerSession } from '#auth'
+import supabase from '../../../config/supabaseClient'
 import dayjs from 'dayjs';
 
 export default eventHandler(async event => {
   // Only allow POST requests
   assertMethod(event, ['POST']);
 
-  const session = await getServerSession(event);
-
-  // If not authenticated do nothing
-  if (!session) {
-    return { statusMessage: 'unauthenticated' }
-  }
-
-  const token = await getTokenId(event);
   const body = await readBody(event);
 
   // Validate tournament
-  const { error } = TournamentSchema.validate(body, {
+  const { error: errorValidate } = TournamentSchema.validate(body, {
     abortEarly: true,
     allowUnknown: true,
   });
 
   // If we get an error, send it back
-  if (error) {
+  if (errorValidate) {
     throw createError({
       statusCode: 200,
-      statusMessage: error.message,
+      statusMessage: errorValidate.message,
     });
   }
 
   // Check if tournament exists
-  const tournamentExist = await prisma.tournament.findFirst({
-    where: {
-      id: { equals: body.id },
-      userId: { equals: String(token) }
-    },
-    select: {
-      id: true,
-    },
-  });
+  const { data, error } = await supabase.from('Tournament').select().eq('id', body.id)
 
-  if (!tournamentExist) {
+  if (error) {
     throw createError({
       statusCode: 200,
-      statusMessage: 'Sorry dit toernooi bestaat niet',
+      statusMessage: 'Toernooi niet gevonden',
     });
+  } else {
+    // Update attendee
+    const { data: dataInserted, error: errorInsert } = await supabase.from('Tournament')
+      .update({ name: body.name, updatedAt: dayjs().format() })
+      .eq('id', body.id)
+
+    if (errorInsert) {
+      throw createError({
+        statusCode: 200,
+        statusMessage: 'Sorry er gaat iets mis bij het opslaan van het toernooi',
+      });
+    }
+
+    return dataInserted;
   }
-
-  // Update tournament
-  const tournament = await prisma.tournament.update({
-    where: {
-      id: body.id,
-    },
-    data: {
-      name: body.name,
-      updatedAt: dayjs().format()
-    },
-  });
-
-  return tournament;
 });

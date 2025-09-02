@@ -7,34 +7,34 @@
           <NuxtLink to="/" class="btn">Home</NuxtLink>
         </li>
         <li>
-          <NuxtLink v-if="loggedIn" to="/deelnemer/" class="btn">Deelnemers overzicht</NuxtLink>
+          <NuxtLink v-if="user" to="/deelnemer/" class="btn">Deelnemers overzicht</NuxtLink>
         </li>
         <li>
-          <NuxtLink v-if="loggedIn" to="/toernooi/" class="btn">Toernooi overzicht</NuxtLink>
+          <NuxtLink v-if="user" to="/toernooi/" class="btn">Toernooi overzicht</NuxtLink>
         </li>
         <li>
-          <NuxtLink v-if="loggedIn" to="/gebruiker/" class="btn">Gebruiker overzicht</NuxtLink>
-        </li>
-        <li>
-          <NuxtLink class="btn" v-if="loggedIn" @click="handleLogout">Logout</NuxtLink>
-          <NuxtLink class="btn" v-else @click="handleLogin">Login</NuxtLink>
+          <NuxtLink class="btn" v-if="user" @click="signOut">Logout</NuxtLink>
+          <NuxtLink class="btn" v-else to="/login">Login</NuxtLink>
         </li>
       </ul>
     </nav>
+    {{ user?.header }}
   </header>
 </template>
 
 <script setup>
-const { status, signIn, signOut } = useAuth();
-const loggedIn = computed(() => status.value === 'authenticated')
+  const user = useSupabaseUser();
 
-async function handleLogin() {
-  await signIn()
-}
-
-async function handleLogout() {
-  if (confirm('Weet je zeker dat je wilt uitloggen?')) {
-    await signOut()
+  async function signOut() {
+    try {
+      loading.value = true
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+      user.value = null
+    } catch (error) {
+      alert(error.message)
+    } finally {
+      loading.value = false
+    }
   }
-}
 </script>

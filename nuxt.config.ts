@@ -28,9 +28,6 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/css/tailwind.css'],
-  // typescript: {
-  //   shim: false
-  // },
   devtools: { enabled: false },
   postcss: {
     plugins: {
@@ -38,20 +35,13 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  auth: {
-    provider: {
-      type: 'authjs',
-    },
-    // globalAppMiddleware: {
-    //   isEnabled: true,
-    // },
-  },
   modules: [
     'nuxt-icon',
     'dayjs-nuxt',
     'nuxt-server-utils',
-    '@sidebase/nuxt-auth',
-    "@nuxt/ui"
+    "@nuxt/ui",
+    "@nuxt/icon",
+    '@nuxtjs/supabase'
   ],
   typescript: {
     shim: false,
@@ -59,12 +49,5 @@ export default defineNuxtConfig({
   runtimeConfig: {
     DATABASE_URL: process.env.DATABASE_URL,
     DIRECT_URL: process.env.DIRECT_URL,
-    NEXTAUTH_URL: process.env.AUTH_SECRET,
-    NEXTAUTH_SECRET: process.env.AUTH_SECRET,
-    EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,
-    EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT,
-    EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
-    EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
-    EMAIL_FROM: process.env.EMAIL_FROM,
   },
 });

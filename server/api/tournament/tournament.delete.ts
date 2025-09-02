@@ -1,43 +1,48 @@
-import prisma from '../../../db/db';
+import supabase from '../../../config/supabaseClient'
 
 export default defineEventHandler(async event => {
-   // Only allow DELETE requests
-   assertMethod(event, ['DELETE']);
+  // Only allow DELETE requests
+  assertMethod(event, ['DELETE']);
 
   const body = await readBody(event);
 
   // Validate user
-  const { error } = TournamentDeleteSchema.validate(body, {
+  const { error: errorValidate } = TournamentDeleteSchema.validate(body, {
     abortEarly: true,
     allowUnknown: true,
   });
 
   // If we get an error, send it back
-  if (error) {
+  if (errorValidate) {
     throw createError({
       statusCode: 200,
-      statusMessage: error.message,
+      statusMessage: errorValidate.message,
     });
   }
 
   // Check if tournament exists
-  const tournamentExist = prisma.tournament.findFirst({
-    where: { id: body.id },
-  });
+  const { data, error } = await supabase.from('Tournament')
+    .select()
+    .eq('id', body.id)
 
-  if (tournamentExist === null) {
+  if (error) {
     throw createError({
       statusCode: 200,
-      statusMessage: 'Sorry dit tournooi bestaat niet',
+      statusMessage: 'Toernooi niet gevonden',
     });
+  } else {
+    // Delete attendee
+    const { data: dataDelete, error: errorDelete } = await supabase.from('Tournament')
+      .delete()
+      .eq('id', body.id)
+
+    if (errorDelete) {
+      throw createError({
+        statusCode: 200,
+        statusMessage: 'Verwijderen van toernooi mislukt',
+      });
+    } else {
+      return dataDelete;
+    }
   }
-
-  // // Delete tournament
-  const tournament = await prisma.tournament.delete({
-    where: {
-      id: body.id,
-    },
-  });
-
-  return tournament;
 });

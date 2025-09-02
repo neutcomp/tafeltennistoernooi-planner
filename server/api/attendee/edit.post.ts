@@ -1,65 +1,47 @@
-import prisma from '../../../db/db';
-import { getServerSession } from '#auth'
+import supabase from '../../../config/supabaseClient'
 import dayjs from 'dayjs';
 
 export default eventHandler(async event => {
   // Only allow POST requests
   assertMethod(event, ['POST']);
 
-  const session = await getServerSession(event);
-
-  // If not authenticated do nothing
-  if (!session) {
-    return { statusMessage: 'unauthenticated' }
-  }
-
-  const token = await getTokenId(event);
   const body = await readBody(event);
 
   // Validate attendee
-  const { error } = AttendeeSchema.validate(body, {
+  const { error: errorValidate } = AttendeeSchema.validate(body, {
     abortEarly: true,
     allowUnknown: true,
   });
 
   // If we get an error, send it back
-  if (error) {
+  if (errorValidate) {
     throw createError({
       statusCode: 200,
-      statusMessage: error.message,
+      statusMessage: errorValidate.message,
     });
   }
 
   // Check if attendee exists
-  const attendeeExist = await prisma.attendee.findFirst({
-    where: {
-      id: { equals: body.id },
-      userId: { equals: String(token) }
-    },
-    select: {
-      id: true,
-    },
-  });
+  const { data, error } = await supabase.from('attendee').select().eq('id', body.id)
 
-  if (!attendeeExist) {
+  if (error) {
     throw createError({
       statusCode: 200,
-      statusMessage: 'Sorry deze deelnemer bestaat niet',
+      statusMessage: 'Deelnemers niet gevonden',
     });
+  } else {
+    // Update attendee
+    const { data: dataInserted, error: errorInsert } = await supabase.from('attendee')
+      .update({ firstname: body.firstname, lastname: body.lastname, rating: Number(body.rating), updated_at: dayjs().format() })
+      .eq('id', body.id)
+
+    if (errorInsert) {
+      throw createError({
+        statusCode: 200,
+        statusMessage: 'Sorry er gaat iets mis bij het opslaan van de deelnemer',
+      });
+    }
+
+    return dataInserted;
   }
-
-  // Update attendee
-  const attendee = await prisma.attendee.update({
-    where: {
-      id: body.id,
-    },
-    data: {
-      firstname: body.firstname,
-      lastname: body.lastname,
-      rating: Number(body.rating),
-      updatedAt: dayjs().format()
-    },
-  });
-
-  return attendee;
 });

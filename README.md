@@ -20,7 +20,7 @@ DATABASE_URL="mysql://username:password@localhost:3306/my-database-name"
 
 ## Installeer de database
 
-npx prisma migrate dev --name init
+Maak bij Supabase een database aan
 
 ## Development Server
 

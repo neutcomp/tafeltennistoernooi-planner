@@ -1,4 +1,4 @@
-import prisma from '../../../db/db';
+import supabase from '../../../config/supabaseClient'
 
 export default defineEventHandler(async event => {
   // Only allow DELETE requests
@@ -7,37 +7,42 @@ export default defineEventHandler(async event => {
   const body = await readBody(event);
 
   // Validate attendee
-  const { error } = AttendeeDeleteSchema.validate(body, {
+  const { error: errorValidate } = AttendeeDeleteSchema.validate(body, {
     abortEarly: true,
     allowUnknown: true,
   });
 
   // If we get an error, send it back
-  if (error) {
+  if (errorValidate) {
     throw createError({
       statusCode: 200,
-      statusMessage: error.message,
+      statusMessage: errorValidate.message,
     });
   }
 
   // Check if attendee exists
-  const attendeeExist = prisma.attendee.findFirst({
-    where: { id: body.id },
-  });
+  const { data, error } = await supabase.from('attendee')
+    .select()
+    .eq('id', body.id)
 
-  if (attendeeExist === null) {
+  if (error) {
     throw createError({
       statusCode: 200,
-      statusMessage: 'Sorry deze deelnemer bestaat niet',
+      statusMessage: 'Deelnemers niet gevonden',
     });
+  } else {
+    // Delete attendee
+    const { data: dataDelete, error: errorDelete } = await supabase.from('attendee')
+      .delete()
+      .eq('id', body.id)
+
+    if (errorDelete) {
+      throw createError({
+        statusCode: 200,
+        statusMessage: 'Verwijderen van deelnemer mislukt',
+      });
+    } else {
+      return dataDelete;
+    }
   }
-
-  // // Delete attendee
-  const attendee = await prisma.attendee.delete({
-    where: {
-      id: body.id,
-    },
-  });
-
-  return attendee;
 });

@@ -1,22 +1,26 @@
-import { getTokenId } from '~/server/utils/helper';
-import prisma from '../../../db/db';
+import supabase from '../../../config/supabaseClient'
 
 export default defineEventHandler(async event => {
   // Only allow GET requests
   assertMethod(event, ['GET']);
 
-  const token = await getTokenId(event);
   //const { searchOn } = event.context.params;
+  console.log('Session: ' + supabase.auth.getSession.toString());
 
-  const attendees = prisma.attendee.findMany({
-    where: { userId: token },
-    orderBy: [{
-      firstname: 'asc'
-    },
-    {
-      lastname: 'asc'
-    }]
-  });
+  const { error, data } = await supabase.from('attendee')
+    .select();
+  console.log('test');
 
-  return attendees;
+  if (error) {
+    console.log(error);
+
+    throw createError({
+      statusCode: 200,
+      statusMessage: 'Error in ophalen deelnemers',
+    });
+  } else {
+    console.log(data);
+
+    return data;
+  }
 });
